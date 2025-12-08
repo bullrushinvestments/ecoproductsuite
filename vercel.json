@@ -1,0 +1,165 @@
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvVariables {
+  [key: string]: string | undefined;
+}
+
+interface HeaderRule {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  src: string;
+  headers: Array<{ key: string; value: string[] }>;
+}
+
+interface DeployConfig {
+  build?: BuildCommand;
+  env?: EnvVariables;
+  redirects?: Array<{
+    source: string;
+    destination: string;
+    statusCode: number;
+  }>;
+  headers?: Array<HeaderRule>;
+  cache?: CacheStrategy[];
+  vercelSettings?: Record<string, any>;
+  netlifySettings?: Record<string, any>;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_STRIPE_KEY: process.env.NEXT_PUBLIC_STRIPE_KEY
+  },
+  redirects: [
+    {
+      source: "/old-url",
+      destination: "/new-url",
+      statusCode: 301
+    }
+  ],
+  headers: [
+    {
+      source: "/(.*)",
+      headers: [
+        { key: "Access-Control-Allow-Origin", value: "*" },
+        { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
+        { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
+      ]
+    }
+  ],
+  cache: [
+    {
+      src: "/api/:path*",
+      headers: [
+        { key: "Cache-Control", value: ["s-maxage=1, stale-while-revalidate=30"] }
+      ]
+    },
+    {
+      src: "/_next/static/:path*",
+      headers: [
+        { key: "Cache-Control", value: ["max-age=604800", "stale-while-revalidate", "stale-if-error"] }
+      ]
+    }
+  ],
+  vercelSettings: {
+    buildCommand: "yarn run build",
+    startCommand: "yarn run start"
+  },
+  netlifySettings: {
+    functions: ".vercel/functions",
+    redirects: "_redirects"
+  }
+};
+
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvVariables {
+  [key: string]: string | undefined;
+}
+
+interface HeaderRule {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  src: string;
+  headers: Array<{ key: string; value: string[] }>;
+}
+
+interface DeployConfig {
+  build?: BuildCommand;
+  env?: EnvVariables;
+  redirects?: Array<{
+    source: string;
+    destination: string;
+    statusCode: number;
+  }>;
+  headers?: Array<HeaderRule>;
+  cache?: CacheStrategy[];
+  vercelSettings?: Record<string, any>;
+  netlifySettings?: Record<string, any>;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_STRIPE_KEY: process.env.NEXT_PUBLIC_STRIPE_KEY
+  },
+  redirects: [
+    {
+      source: "/old-url",
+      destination: "/new-url",
+      statusCode: 301
+    }
+  ],
+  headers: [
+    {
+      source: "/(.*)",
+      headers: [
+        { key: "Access-Control-Allow-Origin", value: "*" },
+        { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
+        { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
+      ]
+    }
+  ],
+  cache: [
+    {
+      src: "/api/:path*",
+      headers: [
+        { key: "Cache-Control", value: ["s-maxage=1, stale-while-revalidate=30"] }
+      ]
+    },
+    {
+      src: "/_next/static/:path*",
+      headers: [
+        { key: "Cache-Control", value: ["max-age=604800", "stale-while-revalidate", "stale-if-error"] }
+      ]
+    }
+  ],
+  vercelSettings: {
+    buildCommand: "yarn run build",
+    startCommand: "yarn run start"
+  },
+  netlifySettings: {
+    functions: ".vercel/functions",
+    redirects: "_redirects"
+  }
+};
